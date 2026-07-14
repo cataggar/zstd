@@ -23,6 +23,8 @@ zstdmt
 *.app
 
 # Build artefacts
+.zig-cache/
+zig-out/
 contrib/linux-kernel/linux/
 projects/
 bin/
