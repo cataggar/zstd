@@ -26,7 +26,6 @@ const library_sources = &.{
     "lib/compress/zstd_preSplit.c",
     "lib/compress/zstdmt_compress.c",
     "lib/decompress/huf_decompress.c",
-    "lib/decompress/huf_decompress_amd64.S",
     "lib/decompress/zstd_ddict.c",
     "lib/decompress/zstd_decompress.c",
     "lib/decompress/zstd_decompress_block.c",
@@ -112,6 +111,7 @@ fn configureModule(b: *std.Build, module: *std.Build.Module, multithread: bool) 
     module.addCMacro("DEBUGLEVEL", "0");
     module.addCMacro("XXH_NAMESPACE", "ZSTD_");
     module.addCMacro("ZSTD_LEGACY_SUPPORT", "0");
+    module.addCMacro("ZSTD_DISABLE_ASM", "1");
 
     if (multithread) {
         module.addCMacro("ZSTD_MULTITHREAD", "1");
