@@ -54,6 +54,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
     const shared = b.option(bool, "shared", "Build libzstd as a shared library") orelse false;
     const multithread = b.option(bool, "multithread", "Enable multithreaded compression") orelse true;
+    const tools = b.option(bool, "tools", "Build the zstd command-line utility") orelse true;
 
     const lib_mod = b.createModule(.{
         .target = target,
@@ -77,6 +78,8 @@ pub fn build(b: *std.Build) void {
     lib.installHeader(b.path("lib/zstd_errors.h"), "zstd_errors.h");
     lib.installHeader(b.path("lib/zdict.h"), "zdict.h");
     b.installArtifact(lib);
+
+    if (!tools) return;
 
     const exe_mod = b.createModule(.{
         .target = target,
