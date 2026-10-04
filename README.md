@@ -26,6 +26,19 @@ a list of known ports and bindings is provided on [Zstandard homepage](https://f
 [OSSFuzzBadge]: https://oss-fuzz-build-logs.storage.googleapis.com/badges/zstd.svg
 [OSSFuzzLink]: https://bugs.chromium.org/p/oss-fuzz/issues/list?sort=-opened&can=1&q=proj:zstd
 
+## Zig build
+
+The Zig package requires Zig 0.17.0 and builds the `zstd` library and CLI:
+
+```sh
+zig build -Doptimize=fast
+zig build run -- --version
+```
+
+Use `-Dtools=false` when only the library is needed. `-Dshared=true` builds a
+shared library, and `-Dmultithread=false` disables multithreaded compression.
+The portable decompressor remains enabled for all targets.
+
 ## Benchmarks
 
 For reference, several fast compression algorithms were tested and compared
