@@ -2,6 +2,10 @@
 
 __Zstandard__, or `zstd` as short version, is a fast lossless compression algorithm,
 targeting real-time compression scenarios at zlib-level and better compression ratios.
+
+The Zig build supports Zig 0.16 and 0.17. Use `zig build -j2` for the library
+and CLI, `zig build -j2 -Dtools=false` for the library only, and
+`zig build run -j2 -- --version` to pass arguments to the CLI.
 It's backed by a very fast entropy stage, provided by [Huff0 and FSE library](https://github.com/Cyan4973/FiniteStateEntropy).
 
 Zstandard's format is stable and documented in [RFC8878](https://datatracker.ietf.org/doc/html/rfc8878). Multiple independent implementations are already available.
