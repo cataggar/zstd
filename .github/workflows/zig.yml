@@ -1,0 +1,39 @@
+name: Zig
+
+on:
+  push:
+    branches: [zig16]
+  pull_request:
+    branches: [zig16]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      ZIG_GLOBAL_CACHE_DIR: ${{ github.workspace }}/.zig-global-cache
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - name: Install Zig 0.17.0
+        run: |
+          curl --fail --location --retry 3 https://github.com/cataggar/zig/releases/download/v0.17.0/zig-x86_64-linux-0.17.0.tar.xz -o zig.tar.xz
+          echo "1cbe9df9f27e6b78d14ccbca43b6703a404ef79ef1c463de901d7f088d4e2026  zig.tar.xz" | sha256sum --check
+          tar -xf zig.tar.xz
+          echo "$PWD/zig-x86_64-linux-0.17.0" >> "$GITHUB_PATH"
+      - name: Build and exercise the CLI
+        run: |
+          zig build -j2 -Doptimize=fast
+          zig build run -j2 -- --version
+          printf 'Zig 0.17 Zstandard roundtrip\n' > zig-input.txt
+          zig-out/bin/zstd -q -f zig-input.txt -o zig-input.zst
+          zig-out/bin/zstd -q -d -c zig-input.zst > zig-output.txt
+          cmp zig-input.txt zig-output.txt
+          zig-out/bin/zstd -q -t zig-input.zst
+      - name: Build the library configurations
+        run: |
+          zig build -j2 -Dtools=false -Doptimize=fast
+          zig build -j2 -Dtools=false -Dshared=true -Dmultithread=false -Doptimize=fast
+          zig build -j2 -Dtools=false -Dtarget=aarch64-linux-gnu -Doptimize=fast
+          zig build -j2 -Dtools=false -Dtarget=x86_64-windows-gnu -Doptimize=fast
