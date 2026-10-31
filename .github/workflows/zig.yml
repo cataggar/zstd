@@ -2,9 +2,9 @@ name: Zig
 
 on:
   push:
-    branches: [zig16]
+    branches: [zig]
   pull_request:
-    branches: [zig16]
+    branches: [zig]
 
 permissions:
   contents: read
